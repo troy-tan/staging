@@ -45,7 +45,7 @@ struct dev_pm_ops name = { \
 									\
 		return fn(&pdev->dev);					\
 	}
-#endif
+#endif 
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
 #define RX_FLAG_MACTIME_MPDU RX_FLAG_TSFT

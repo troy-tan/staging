@@ -76,20 +76,28 @@ static u8 _rtl_rc_get_highest_rix(struct rtl_priv *rtlpriv,
 				return B_MODE_MAX_RIX;
 			} else if (wireless_mode == WIRELESS_MODE_G) {
 				return G_MODE_MAX_RIX;
-			} else {
+			} else if (wireless_mode == WIRELESS_MODE_N_24G) {
 				if (get_rf_type(rtlphy) != RF_2T2R)
 					return N_MODE_MCS7_RIX;
 				else
 					return N_MODE_MCS15_RIX;
+			} else if (wireless_mode == WIRELESS_MODE_AC_24G){
+				return AC_MODE_MCS9_RIX;
+			} else {
+				return 0;
 			}
 		} else {
 			if (wireless_mode == WIRELESS_MODE_A) {
 				return A_MODE_MAX_RIX;
-			} else {
+			} else if (wireless_mode == WIRELESS_MODE_N_5G) {
 				if (get_rf_type(rtlphy) != RF_2T2R)
 					return N_MODE_MCS7_RIX;
 				else
 					return N_MODE_MCS15_RIX;
+			} else if (wireless_mode == WIRELESS_MODE_AC_5G){
+				return AC_MODE_MCS9_RIX;
+			} else {
+				return 0;
 			}
 		}
 	}
@@ -103,11 +111,14 @@ static void _rtl_rc_rate_set_series(struct rtl_priv *rtlpriv,
 				    bool not_data)
 {
 	struct rtl_mac *mac = rtl_mac(rtlpriv);
-	u8 sgi_20 = 0, sgi_40 = 0;
+	u8 sgi_20 = 0, sgi_40 = 0, sgi_80 = 0;
 
 	if (sta) {
 		sgi_20 = sta->ht_cap.cap & IEEE80211_HT_CAP_SGI_20;
 		sgi_40 = sta->ht_cap.cap & IEEE80211_HT_CAP_SGI_40;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0))
+		sgi_80 = sta->vht_cap.cap & IEEE80211_VHT_CAP_SHORT_GI_80;
+#endif
 	}
 	rate->count = tries;
 	rate->idx = rix >= 0x00 ? rix : 0x00;
@@ -117,22 +128,35 @@ static void _rtl_rc_rate_set_series(struct rtl_priv *rtlpriv,
 			rate->flags |= IEEE80211_TX_RC_USE_SHORT_PREAMBLE;
 		if (mac->opmode == NL80211_IFTYPE_AP ||
 			mac->opmode == NL80211_IFTYPE_ADHOC) {
-			if (sta && (sta->ht_cap.cap &
+			if (sta && (sta->ht_cap.cap & 
 				    IEEE80211_HT_CAP_SUP_WIDTH_20_40))
 				rate->flags |= IEEE80211_TX_RC_40_MHZ_WIDTH;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0))
+			if (sta && (sta->vht_cap.vht_supported))
+				rate->flags |= IEEE80211_TX_RC_80_MHZ_WIDTH;
+#endif
 		} else {
 			if (mac->bw_40)
 				rate->flags |= IEEE80211_TX_RC_40_MHZ_WIDTH;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0))
+			if (mac->bw_80)
+				rate->flags |= IEEE80211_TX_RC_80_MHZ_WIDTH;
+#endif
 		}
-		if (sgi_20 || sgi_40)
+		
+		if (sgi_20 || sgi_40 || sgi_80)
 			rate->flags |= IEEE80211_TX_RC_SHORT_GI;
 		if (sta && sta->ht_cap.ht_supported)
 			rate->flags |= IEEE80211_TX_RC_MCS;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0))
+		if (sta && sta->vht_cap.vht_supported)
+			rate->flags |= IEEE80211_TX_RC_VHT_MCS;
+#endif
 	}
 }
 
 static void rtl_get_rate(void *ppriv, struct ieee80211_sta *sta,
-			 void *priv_sta,
+			 void *priv_sta, 
 			 struct ieee80211_tx_rate_control *txrc)
 {
 	struct rtl_priv *rtlpriv = ppriv;
@@ -195,7 +219,7 @@ static void rtl_tx_status(void *ppriv,
 	if (rtl_is_special_data(mac->hw, skb, true))
 		return;
 
-	if (is_multicast_ether_addr(ieee80211_get_DA(hdr)) ||
+	if (is_multicast_ether_addr(ieee80211_get_DA(hdr)) || 
 	    is_broadcast_ether_addr(ieee80211_get_DA(hdr)))
 		return;
 
@@ -206,9 +230,9 @@ static void rtl_tx_status(void *ppriv,
 				!(skb->protocol == cpu_to_be16(ETH_P_PAE))) {
 			if (ieee80211_is_data_qos(fc)) {
 				u8 tid = rtl_get_tid(skb);
-				if (_rtl_tx_aggr_check(rtlpriv, sta_entry,
+				if (_rtl_tx_aggr_check(rtlpriv, sta_entry, 
 						       tid)) {
-					sta_entry->tids[tid].agg.agg_state =
+					sta_entry->tids[tid].agg.agg_state = 
 						RTL_AGG_PROGRESS;
 					/*<delete in kernel start>*/
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
@@ -228,7 +252,6 @@ static void rtl_tx_status(void *ppriv,
 
 static void rtl_rate_init(void *ppriv,
 			  struct ieee80211_supported_band *sband,
-			  struct cfg80211_chan_def *chandef,
 			  struct ieee80211_sta *sta, void *priv_sta)
 {
 }
@@ -243,7 +266,6 @@ static void rtl_rate_update(void *ppriv,
 #else
 static void rtl_rate_update(void *ppriv,
 			    struct ieee80211_supported_band *sband,
-			    struct cfg80211_chan_def *chandef,
 			    struct ieee80211_sta *sta, void *priv_sta,
 			    u32 changed)
 {

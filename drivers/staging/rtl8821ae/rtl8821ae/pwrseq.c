@@ -30,7 +30,7 @@
 #include "pwrseqcmd.h"
 #include "pwrseq.h"
 
-/*
+/* 
     drivers should parse below arrays and do the corresponding actions
 */
 //3 Power on  Array
@@ -48,9 +48,9 @@ struct wlan_pwr_cfg rtl8812_radio_off_flow[RTL8812_TRANS_ACT_TO_CARDEMU_STEPS+RT
 };
 
 //3Card Disable Array
-struct wlan_pwr_cfg rtl8812_card_disable_flow[ RTL8812_TRANS_ACT_TO_CARDEMU_STEPS
-	+ RTL8812_TRANS_CARDEMU_TO_PDN_STEPS
-	+ RTL8812_TRANS_END_STEPS ] =
+struct wlan_pwr_cfg rtl8812_card_disable_flow[ RTL8812_TRANS_ACT_TO_CARDEMU_STEPS 
+	+ RTL8812_TRANS_CARDEMU_TO_PDN_STEPS 
+	+ RTL8812_TRANS_END_STEPS ] = 
 {
 	RTL8812_TRANS_ACT_TO_CARDEMU
 	RTL8812_TRANS_CARDEMU_TO_CARDDIS
@@ -58,12 +58,12 @@ struct wlan_pwr_cfg rtl8812_card_disable_flow[ RTL8812_TRANS_ACT_TO_CARDEMU_STEP
 };
 
 //3 Card Enable Array
-struct wlan_pwr_cfg rtl8812_card_enable_flow[ RTL8812_TRANS_ACT_TO_CARDEMU_STEPS
-	+ RTL8812_TRANS_CARDEMU_TO_PDN_STEPS
+struct wlan_pwr_cfg rtl8812_card_enable_flow[ RTL8812_TRANS_ACT_TO_CARDEMU_STEPS 
+	+ RTL8812_TRANS_CARDEMU_TO_PDN_STEPS 
 	+ RTL8812_TRANS_END_STEPS ] =
 {
 	RTL8812_TRANS_CARDDIS_TO_CARDEMU
-	RTL8812_TRANS_CARDEMU_TO_ACT
+	RTL8812_TRANS_CARDEMU_TO_ACT		
 	RTL8812_TRANS_END
 };
 
@@ -89,19 +89,19 @@ struct wlan_pwr_cfg rtl8812_resume_flow[RTL8812_TRANS_ACT_TO_CARDEMU_STEPS+RTL88
 struct wlan_pwr_cfg rtl8812_hwpdn_flow[RTL8812_TRANS_ACT_TO_CARDEMU_STEPS+RTL8812_TRANS_CARDEMU_TO_PDN_STEPS+RTL8812_TRANS_END_STEPS]=
 {
 	RTL8812_TRANS_ACT_TO_CARDEMU
-	RTL8812_TRANS_CARDEMU_TO_PDN
+	RTL8812_TRANS_CARDEMU_TO_PDN		
 	RTL8812_TRANS_END
 };
 
-//3 Enter LPS
+//3 Enter LPS 
 struct wlan_pwr_cfg rtl8812_enter_lps_flow[RTL8812_TRANS_ACT_TO_LPS_STEPS+RTL8812_TRANS_END_STEPS]=
 {
 	//FW behavior
-	RTL8812_TRANS_ACT_TO_LPS
+	RTL8812_TRANS_ACT_TO_LPS	
 	RTL8812_TRANS_END
 };
 
-//3 Leave LPS
+//3 Leave LPS 
 struct wlan_pwr_cfg rtl8812_leave_lps_flow[RTL8812_TRANS_LPS_TO_ACT_STEPS+RTL8812_TRANS_END_STEPS]=
 {
 	//FW behavior

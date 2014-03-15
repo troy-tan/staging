@@ -136,7 +136,7 @@
 #define	PHY_TXPWR			BIT(8)
 #define	PHY_PWRDIFF			BIT(9)
 
-/* Define Dynamic Mechanism check module bit --> FDM */
+/* Define Dynamic Mechanism check module bit --> FDM */ 
 #define WA_IOT				BIT(0)
 #define DM_PWDB				BIT(1)
 #define DM_MONITOR			BIT(2)

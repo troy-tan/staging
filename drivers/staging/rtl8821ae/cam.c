@@ -154,7 +154,7 @@ u8 rtl_cam_add_one_entry(struct ieee80211_hw *hw, u8 *mac_addr,
 	return 1;
 
 }
-//EXPORT_SYMBOL(rtl_cam_add_one_entry);
+EXPORT_SYMBOL(rtl_cam_add_one_entry);
 
 int rtl_cam_delete_one_entry(struct ieee80211_hw *hw,
 			     u8 *mac_addr, u32 ul_key_id)
@@ -178,7 +178,7 @@ int rtl_cam_delete_one_entry(struct ieee80211_hw *hw,
 	return 0;
 
 }
-//EXPORT_SYMBOL(rtl_cam_delete_one_entry);
+EXPORT_SYMBOL(rtl_cam_delete_one_entry);
 
 void rtl_cam_reset_all_entry(struct ieee80211_hw *hw)
 {
@@ -188,7 +188,7 @@ void rtl_cam_reset_all_entry(struct ieee80211_hw *hw)
 	ul_command = BIT(31) | BIT(30);
 	rtl_write_dword(rtlpriv, rtlpriv->cfg->maps[RWCAM], ul_command);
 }
-//EXPORT_SYMBOL(rtl_cam_reset_all_entry);
+EXPORT_SYMBOL(rtl_cam_reset_all_entry);
 
 void rtl_cam_mark_invalid(struct ieee80211_hw *hw, u8 uc_index)
 {
@@ -229,7 +229,7 @@ void rtl_cam_mark_invalid(struct ieee80211_hw *hw, u8 uc_index)
 	RT_TRACE(COMP_SEC, DBG_DMESG,
 		 ("rtl_cam_mark_invalid(): WRITE A0: %x \n", ul_command));
 }
-//EXPORT_SYMBOL(rtl_cam_mark_invalid);
+EXPORT_SYMBOL(rtl_cam_mark_invalid);
 
 void rtl_cam_empty_entry(struct ieee80211_hw *hw, u8 uc_index)
 {
@@ -283,20 +283,20 @@ void rtl_cam_empty_entry(struct ieee80211_hw *hw, u8 uc_index)
 	}
 
 }
-//EXPORT_SYMBOL(rtl_cam_empty_entry);
+EXPORT_SYMBOL(rtl_cam_empty_entry);
 
 u8 rtl_cam_get_free_entry(struct ieee80211_hw *hw, u8 *sta_addr)
 {
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	u32 bitmap = (rtlpriv->sec.hwsec_cam_bitmap) >> 4;
 	u8 entry_idx = 0;
-	u8 i, *addr;
+	u8 i, *addr;            
 
 	if (NULL == sta_addr) {
 		RT_TRACE(COMP_SEC, DBG_EMERG,
 			("sta_addr is NULL.\n"));
 		return TOTAL_CAM_ENTRY;
-	}
+	}               
 	/* Does STA already exist? */
 	for (i = 4; i < TOTAL_CAM_ENTRY; i++) {
 		addr = rtlpriv->sec.hwsec_cam_sta_addr[i];
@@ -310,7 +310,7 @@ u8 rtl_cam_get_free_entry(struct ieee80211_hw *hw, u8 *sta_addr)
 				("-----hwsec_cam_bitmap: 0x%x entry_idx=%d\n",
 				 rtlpriv->sec.hwsec_cam_bitmap, entry_idx));
 			rtlpriv->sec.hwsec_cam_bitmap |= BIT(0) << entry_idx;
-			memcpy(rtlpriv->sec.hwsec_cam_sta_addr[entry_idx],
+			memcpy(rtlpriv->sec.hwsec_cam_sta_addr[entry_idx], 
 			       sta_addr, ETH_ALEN);
 			return entry_idx;
 		}
@@ -318,7 +318,7 @@ u8 rtl_cam_get_free_entry(struct ieee80211_hw *hw, u8 *sta_addr)
 	}
 	return TOTAL_CAM_ENTRY;
 }
-//EXPORT_SYMBOL(rtl_cam_get_free_entry);
+EXPORT_SYMBOL(rtl_cam_get_free_entry);
 
 void rtl_cam_del_entry(struct ieee80211_hw *hw, u8 *sta_addr)
 {
@@ -341,7 +341,7 @@ void rtl_cam_del_entry(struct ieee80211_hw *hw, u8 *sta_addr)
 	for (i = 4; i < TOTAL_CAM_ENTRY; i++) {
 		addr = rtlpriv->sec.hwsec_cam_sta_addr[i];
 		bitmap = (rtlpriv->sec.hwsec_cam_bitmap) >> i;
-		if (((bitmap & BIT(0)) == BIT(0)) &&
+		if (((bitmap & BIT(0)) == BIT(0)) && 
 		    (memcmp(addr, sta_addr, ETH_ALEN) == 0)) {
 			/* Remove from HW Security CAM */
 			memset(rtlpriv->sec.hwsec_cam_sta_addr[i], 0, ETH_ALEN);
@@ -351,4 +351,4 @@ void rtl_cam_del_entry(struct ieee80211_hw *hw, u8 *sta_addr)
 	}
 	return;
 }
-//EXPORT_SYMBOL(rtl_cam_del_entry);
+EXPORT_SYMBOL(rtl_cam_del_entry);

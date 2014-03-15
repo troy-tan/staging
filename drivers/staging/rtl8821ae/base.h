@@ -57,6 +57,17 @@ enum ap_peer {
 #define MAX_BIT_RATE_40MHZ_MCS15 	300	/* Mbps */
 #define MAX_BIT_RATE_40MHZ_MCS7 	150	/* Mbps */
 
+#define MAX_BIT_RATE_SHORT_GI_2NSS_80MHZ_MCS9 	867	/* Mbps */
+#define MAX_BIT_RATE_SHORT_GI_2NSS_80MHZ_MCS7 	650	/* Mbps */
+#define MAX_BIT_RATE_LONG_GI_2NSS_80MHZ_MCS9 	780	/* Mbps */
+#define MAX_BIT_RATE_LONG_GI_2NSS_80MHZ_MCS7 	585	/* Mbps */
+
+#define MAX_BIT_RATE_SHORT_GI_1NSS_80MHZ_MCS9 	434	/* Mbps */
+#define MAX_BIT_RATE_SHORT_GI_1NSS_80MHZ_MCS7 	325	/* Mbps */
+#define MAX_BIT_RATE_LONG_GI_1NSS_80MHZ_MCS9 	390	/* Mbps */
+#define MAX_BIT_RATE_LONG_GI_1NSS_80MHZ_MCS7 	293	/* Mbps */
+
+
 #define RTL_RATE_COUNT_LEGACY		12
 #define RTL_CHANNEL_COUNT		14
 
@@ -128,11 +139,11 @@ int rtl_tx_agg_start(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
 	struct ieee80211_sta *sta, u16 tid, u16 * ssn);
 int rtl_tx_agg_stop(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
 	struct ieee80211_sta *sta, u16 tid);
-int rtl_tx_agg_oper(struct ieee80211_hw *hw,
+int rtl_tx_agg_oper(struct ieee80211_hw *hw, 
 		    struct ieee80211_sta *sta, u16 tid);
-int rtl_rx_agg_start(struct ieee80211_hw *hw,
+int rtl_rx_agg_start(struct ieee80211_hw *hw, 
 		     struct ieee80211_sta *sta, u16 tid);
-int rtl_rx_agg_stop(struct ieee80211_hw *hw,
+int rtl_rx_agg_stop(struct ieee80211_hw *hw, 
 		    struct ieee80211_sta *sta, u16 tid);
 void rtl_watchdog_wq_callback(void *data);
 void rtl_fwevt_wq_callback(void *data);
@@ -142,7 +153,7 @@ void rtl_get_tcb_desc(struct ieee80211_hw *hw,
 		      struct ieee80211_sta *sta,
 		      struct sk_buff *skb, struct rtl_tcb_desc *tcb_desc);
 
-int rtl_send_smps_action(struct ieee80211_hw *hw,
+int rtl_send_smps_action(struct ieee80211_hw *hw, 
 		struct ieee80211_sta *sta,
 		enum ieee80211_smps_mode smps);
 u8 *rtl_find_ie(u8 *data, unsigned int len, u8 ie);

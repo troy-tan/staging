@@ -74,9 +74,9 @@ void rtl8812ae_sw_led_on(struct ieee80211_hw *hw, struct rtl_led *pled)
 	u16 	ledreg = REG_LEDCFG1;
 	u8 	ledcfg = 0;
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
-
-	switch (pled->ledpin) {
-		case LED_PIN_LED0:
+	
+	switch (pled->ledpin) {	
+		case LED_PIN_LED0:	
 			ledreg = REG_LEDCFG1;
 			break;
 
@@ -93,9 +93,9 @@ void rtl8812ae_sw_led_on(struct ieee80211_hw *hw, struct rtl_led *pled)
 
 	ledcfg =  rtl_read_byte(rtlpriv, ledreg);
 	ledcfg |= BIT(5); /*Set 0x4c[21]*/
-	ledcfg &= ~(BIT(7) | BIT(6) | BIT(3) |BIT(2) | BIT(1) |BIT(0));
+	ledcfg &= ~(BIT(7) | BIT(6) | BIT(3) |BIT(2) | BIT(1) |BIT(0)); 
 		/*Clear 0x4c[23:22] and 0x4c[19:16]*/
-	rtl_write_byte(rtlpriv, ledreg, ledcfg); /*SW control led0 on.*/
+	rtl_write_byte(rtlpriv, ledreg, ledcfg); /*SW control led0 on.*/	
 	pled->b_ledon = true;
 }
 
@@ -167,7 +167,7 @@ void rtl8812ae_sw_led_off(struct ieee80211_hw *hw, struct rtl_led *pled){
 	if(pcipriv->ledctl.bled_opendrain == true) /*Open-drain arrangement for controlling the LED*/
 	{
 		u8 ledcfg = rtl_read_byte(rtlpriv,  ledreg);
-
+	
 		ledreg &= 0xd0; /* Set to software control.*/
 		rtl_write_byte(rtlpriv, ledreg, (ledcfg | BIT(3)));
 

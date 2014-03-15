@@ -3741,7 +3741,7 @@ EXhalbtc8812a1ant_BtInfoNotify(
 		// need to add back when mp-chip. 12/20/2012
 #if 0		
 		if(set_bt_psd_mode <= 3)
-		{
+		{
 			halbtc8812a1ant_SetBtPsdMode(btcoexist, FORCE_EXEC, 0xd);
 			set_bt_psd_mode++;
 		}

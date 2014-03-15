@@ -408,7 +408,7 @@ void rtl8821ae_dm_write_cck_cca_thres(struct ieee80211_hw *hw, u8 current_cca);
 void rtl8821ae_dm_initialize_txpower_tracking_thermalmeter(struct ieee80211_hw *hw);
 void rtl8812ae_dm_path_diversity(struct ieee80211_hw *hw);
 void rtl8812ae_dm_path_diversity_init(struct ieee80211_hw *hw);
-void rtl8812ae_dm_path_statistics(struct ieee80211_hw *hw,
+void rtl8812ae_dm_path_statistics(struct ieee80211_hw *hw, 
 	u32 rssi_a, u32 rssi_b);
 void rtl812ae_dm_set_txpath_by_txinfo(struct ieee80211_hw *hw,
 	u8 *pdesc);

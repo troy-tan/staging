@@ -100,7 +100,7 @@ struct coex_dm_8723b_2ant{
 	u16 backup_0x948;
 };
 
-struct coex_sta_8723b_2ant{
+struct coex_sta_8723b_2ant{	
 	bool bt_link_exist;
 	bool sco_exist;
 	bool a2dp_exist;
@@ -133,9 +133,9 @@ void ex_halbtc8723b2ant_ips_notify(struct btc_coexist *btcoexist, u8 type);
 void ex_halbtc8723b2ant_lps_notify(struct btc_coexist *btcoexist, u8 type);
 void ex_halbtc8723b2ant_scan_notify(struct btc_coexist *btcoexist, u8 type);
 void ex_halbtc8723b2ant_connect_notify(struct btc_coexist *btcoexist, u8 type);
-void ex_halbtc8723b2ant_media_status_notify(struct btc_coexist *btcoexist,
+void ex_halbtc8723b2ant_media_status_notify(struct btc_coexist *btcoexist, 
 					    u8 type);
-void ex_halbtc8723b2ant_special_packet_notify(struct btc_coexist *btcoexist,
+void ex_halbtc8723b2ant_special_packet_notify(struct btc_coexist *btcoexist, 
 					      u8 type);
 void ex_halbtc8723b2ant_bt_info_notify(struct btc_coexist *btcoexist,
 				       u8 *tmpbuf, u8 length);

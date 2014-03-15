@@ -41,7 +41,7 @@ bool rtl_ps_enable_nic(struct ieee80211_hw *hw)
 	struct rtl_ps_ctl *ppsc = rtl_psc(rtl_priv(hw));
 	struct rtl_hal *rtlhal = rtl_hal(rtl_priv(hw));
 	bool init_status = true;
-
+	
 	/*<1> reset trx ring */
 	if (rtlhal->interface == INTF_PCI)
 		rtlpriv->intf_ops->reset_trx_ring(hw);
@@ -62,7 +62,7 @@ bool rtl_ps_enable_nic(struct ieee80211_hw *hw)
 
 	return init_status;
 }
-//EXPORT_SYMBOL(rtl_ps_enable_nic);
+EXPORT_SYMBOL(rtl_ps_enable_nic);
 
 bool rtl_ps_disable_nic(struct ieee80211_hw *hw)
 {
@@ -80,7 +80,7 @@ bool rtl_ps_disable_nic(struct ieee80211_hw *hw)
 
 	return status;
 }
-//EXPORT_SYMBOL(rtl_ps_disable_nic);
+EXPORT_SYMBOL(rtl_ps_disable_nic);
 
 bool rtl_ps_set_rf_state(struct ieee80211_hw *hw,
 			 enum rf_pwrstate state_toset,
@@ -151,7 +151,7 @@ no_protect:
 
 	case ERFOFF:
 
-		if ((changesource == RF_CHANGE_BY_HW) &&
+		if ((changesource == RF_CHANGE_BY_HW) && 
 		    (ppsc->b_hwradiooff == false)) {
 			ppsc->b_hwradiooff = true;
 		}
@@ -181,7 +181,7 @@ no_protect:
 
 	return b_actionallowed;
 }
-//EXPORT_SYMBOL(rtl_ps_set_rf_state);
+EXPORT_SYMBOL(rtl_ps_set_rf_state);
 
 static void _rtl_ps_inactive_ps(struct ieee80211_hw *hw)
 {
@@ -200,16 +200,12 @@ static void _rtl_ps_inactive_ps(struct ieee80211_hw *hw)
 		}
 	}
 
-	if (rtlpriv->cfg->ops->get_btc_status()){
-		rtlpriv->btcoexist.btc_ops->btc_ips_notify(rtlpriv,
-						ppsc->inactive_pwrstate);
-	}
 	rtl_ps_set_rf_state(hw, ppsc->inactive_pwrstate,
 			    RF_CHANGE_BY_IPS, false);
 
-	if (ppsc->inactive_pwrstate == ERFOFF &&
+	if (ppsc->inactive_pwrstate == ERFOFF && 
 	    rtlhal->interface == INTF_PCI) {
-		if (ppsc->reg_rfps_level & RT_RF_OFF_LEVL_ASPM &&
+		if (ppsc->reg_rfps_level & RT_RF_OFF_LEVL_ASPM && 
 		    !RT_IN_PS_LEVEL(ppsc, RT_PS_LEVEL_ASPM)) {
 			rtlpriv->intf_ops->enable_aspm(hw);
 			RT_SET_PS_LEVEL(ppsc, RT_PS_LEVEL_ASPM);
@@ -234,7 +230,7 @@ void rtl_ips_nic_off_wq_callback(void *data)
 		RT_TRACE(COMP_ERR, DBG_WARNING, ("not station return\n"));
 		return;
 	}
-
+	
 	if (mac->p2p_in_use)
 		return;
 
@@ -272,6 +268,11 @@ void rtl_ips_nic_off_wq_callback(void *data)
 
 			ppsc->inactive_pwrstate = ERFOFF;
 			ppsc->b_in_powersavemode = true;
+
+			/* call before RF off */
+			if (rtlpriv->cfg->ops->get_btc_status())
+				rtlpriv->btcoexist.btc_ops->btc_ips_notify(rtlpriv, 
+									ppsc->inactive_pwrstate);
 
 			/*rtl_pci_reset_trx_ring(hw); */
 			_rtl_ps_inactive_ps(hw);
@@ -313,6 +314,10 @@ void rtl_ips_nic_on(struct ieee80211_hw *hw)
 			ppsc->inactive_pwrstate = ERFON;
 			ppsc->b_in_powersavemode = false;
 			_rtl_ps_inactive_ps(hw);
+			/* call after RF on */
+			if (rtlpriv->cfg->ops->get_btc_status())
+				rtlpriv->btcoexist.btc_ops->btc_ips_notify(rtlpriv, 
+									ppsc->inactive_pwrstate);
 		}
 	}
 	spin_unlock(&rtlpriv->locks.ips_lock);
@@ -394,11 +399,15 @@ void rtl_lps_set_psmode(struct ieee80211_hw *hw, u8 rt_psmode)
 			if (ppsc->p2p_ps_info.opp_ps)
 				rtl_p2p_ps_cmd(hw,P2P_PS_ENABLE);
 
+			if (rtlpriv->cfg->ops->get_btc_status())
+				rtlpriv->btcoexist.btc_ops->btc_lps_notify(rtlpriv, rt_psmode);
 		} else {
 			if (rtl_get_fwlps_doze(hw)) {
 				RT_TRACE(COMP_RF, DBG_DMESG,
 					 ("FW LPS enter ps_mode:%x\n",
 					 ppsc->fwctrl_psmode));
+				if (rtlpriv->cfg->ops->get_btc_status())
+					rtlpriv->btcoexist.btc_ops->btc_lps_notify(rtlpriv, rt_psmode);
 				enter_fwlps = true;
 				ppsc->pwr_mode = ppsc->fwctrl_psmode;
 				ppsc->smart_ps = 2;
@@ -452,9 +461,10 @@ void rtl_lps_enter(struct ieee80211_hw *hw)
 			rtl_lps_set_psmode(hw, EAUTOPS);
 		}
 	}
-
+	
 	spin_unlock_irqrestore(&rtlpriv->locks.lps_lock, flag);
 }
+EXPORT_SYMBOL(rtl_lps_enter);
 
 /*Leave the leisure power save mode.*/
 void rtl_lps_leave(struct ieee80211_hw *hw)
@@ -470,7 +480,7 @@ void rtl_lps_leave(struct ieee80211_hw *hw)
 		if (ppsc->dot11_psmode != EACTIVE) {
 
 			/*FIX ME */
-			rtlpriv->cfg->ops->enable_interrupt(hw);
+			/*rtlpriv->cfg->ops->enable_interrupt(hw); */
 
 			if (ppsc->reg_rfps_level & RT_RF_LPS_LEVEL_ASPM &&
 			    RT_IN_PS_LEVEL(ppsc, RT_PS_LEVEL_ASPM) &&
@@ -487,6 +497,7 @@ void rtl_lps_leave(struct ieee80211_hw *hw)
 	}
 	spin_unlock_irqrestore(&rtlpriv->locks.lps_lock, flag);
 }
+EXPORT_SYMBOL(rtl_lps_leave);
 
 /* For sw LPS*/
 void rtl_swlps_beacon(struct ieee80211_hw *hw, void *data, unsigned int len)
@@ -505,7 +516,7 @@ void rtl_swlps_beacon(struct ieee80211_hw *hw, void *data, unsigned int len)
 
 	if (!rtlpriv->psc.b_swctrl_lps)
 		return;
-
+	
 	if (rtlpriv->mac80211.link_state != MAC80211_LINKED)
 		return;
 
@@ -527,7 +538,7 @@ void rtl_swlps_beacon(struct ieee80211_hw *hw, void *data, unsigned int len)
 		return;
 
 	/* and only beacons from the associated BSSID, please */
-	if (ether_addr_equal(hdr->addr3, rtlpriv->mac80211.bssid))
+	if (compare_ether_addr(hdr->addr3, rtlpriv->mac80211.bssid))
 		return;
 
 	rtlpriv->psc.last_beacon = jiffies;
@@ -557,7 +568,7 @@ void rtl_swlps_beacon(struct ieee80211_hw *hw, void *data, unsigned int len)
 	/* Check whenever the PHY can be turned off again. */
 
 	/* 1. What about buffered unicast traffic for our AID? */
-	u_buffed = ieee80211_check_tim(tim_ie, tim_len,
+	u_buffed = ieee80211_check_tim(tim_ie, tim_len, 
 				       rtlpriv->mac80211.assoc_id);
 
 	/* 2. Maybe the AP wants to send multicast/broadcast data? */
@@ -565,16 +576,16 @@ void rtl_swlps_beacon(struct ieee80211_hw *hw, void *data, unsigned int len)
 	rtlpriv->psc.multi_buffered = m_buffed;
 
 	/* unicast will process by mac80211 through
-	 * set ~IEEE80211_CONF_PS, So we just check
+	 * set ~IEEE80211_CONF_PS, So we just check 
 	 * multicast frames here */
 	if (!m_buffed ) {//&&) {// !rtlpriv->psc.tx_doing) {
-		/* back to low-power land. and delay is
+		/* back to low-power land. and delay is 
 		 * prevent null power save frame tx fail */
 		queue_delayed_work(rtlpriv->works.rtl_wq,
 				   &rtlpriv->works.ps_work, MSECS(5));
 	} else {
-		RT_TRACE(COMP_POWER, DBG_DMESG,
-			 ("u_bufferd: %x, m_buffered: %x\n",
+		RT_TRACE(COMP_POWER, DBG_DMESG, 
+			 ("u_bufferd: %x, m_buffered: %x\n", 
 			  u_buffed, m_buffed));
 	}
 }
@@ -590,13 +601,13 @@ void rtl_swlps_rf_awake(struct ieee80211_hw *hw)
 		return;
 	if (mac->link_state != MAC80211_LINKED)
 		return;
-
-	if (ppsc->reg_rfps_level & RT_RF_LPS_LEVEL_ASPM &&
+	
+	if (ppsc->reg_rfps_level & RT_RF_LPS_LEVEL_ASPM && 
 	    RT_IN_PS_LEVEL(ppsc, RT_PS_LEVEL_ASPM)) {
 		rtlpriv->intf_ops->disable_aspm(hw);
 		RT_CLEAR_PS_LEVEL(ppsc, RT_PS_LEVEL_ASPM);
 	}
-
+	
 	spin_lock_irqsave(&rtlpriv->locks.lps_lock, flag);
 	rtl_ps_set_rf_state(hw, ERFON, RF_CHANGE_BY_PS, false);
 	spin_unlock_irqrestore(&rtlpriv->locks.lps_lock, flag);
@@ -621,7 +632,7 @@ void rtl_swlps_rf_sleep(struct ieee80211_hw *hw)
 
 	if (!rtlpriv->psc.sw_ps_enabled)
 		return;
-
+	
 	if ((rtlpriv->sec.being_setkey) ||
 	    (mac->opmode == NL80211_IFTYPE_ADHOC))
 		return;
@@ -637,14 +648,14 @@ void rtl_swlps_rf_sleep(struct ieee80211_hw *hw)
 	if (rtlpriv->psc.rfchange_inprogress) {
 		spin_unlock(&rtlpriv->locks.rf_ps_lock);
 		return;
-	}
+	}	
 	spin_unlock(&rtlpriv->locks.rf_ps_lock);
 
 	spin_lock_irqsave(&rtlpriv->locks.lps_lock, flag);
 	rtl_ps_set_rf_state(hw, ERFSLEEP, RF_CHANGE_BY_PS,false);
 	spin_unlock_irqrestore(&rtlpriv->locks.lps_lock, flag);
 
-	if (ppsc->reg_rfps_level & RT_RF_OFF_LEVL_ASPM &&
+	if (ppsc->reg_rfps_level & RT_RF_OFF_LEVL_ASPM && 
 	    !RT_IN_PS_LEVEL(ppsc, RT_PS_LEVEL_ASPM)) {
 		rtlpriv->intf_ops->enable_aspm(hw);
 		RT_SET_PS_LEVEL(ppsc, RT_PS_LEVEL_ASPM);
@@ -655,12 +666,12 @@ void rtl_swlps_rf_sleep(struct ieee80211_hw *hw)
 	 * when this beacon is not DTIM, we will set sleep
 	 * time to sleep_intv = rtlpriv->psc.dtim_counter or
 	 * MAX_SW_LPS_SLEEP_INTV(default set to 5) */
-
+	 
 /*<delete in kernel start>*/
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 /*<delete in kernel end>*/
 	if (rtlpriv->psc.dtim_counter == 0) {
-		if (hw->conf.ps_dtim_period == 1)
+		if (hw->conf.ps_dtim_period == 1) 
 			sleep_intv = hw->conf.ps_dtim_period * 2;
 		else
 			sleep_intv = hw->conf.ps_dtim_period;
@@ -670,7 +681,7 @@ void rtl_swlps_rf_sleep(struct ieee80211_hw *hw)
 /*<delete in kernel start>*/
 #else
 	if (rtlpriv->psc.dtim_counter == 0) {
-		if (mac->vif->bss_conf.dtim_period == 1)
+		if (mac->vif->bss_conf.dtim_period == 1) 
 			sleep_intv = mac->vif->bss_conf.dtim_period * 2;
 		else
 			sleep_intv = mac->vif->bss_conf.dtim_period;
@@ -680,14 +691,14 @@ void rtl_swlps_rf_sleep(struct ieee80211_hw *hw)
 #endif
 /*<delete in kernel end>*/
 
-	if (sleep_intv > MAX_SW_LPS_SLEEP_INTV)
+	if (sleep_intv > MAX_SW_LPS_SLEEP_INTV) 
 		sleep_intv = MAX_SW_LPS_SLEEP_INTV;
 
 	/* this print should always be dtim_conter = 0 &
-	 * sleep  = dtim_period, that meaons, we should
+	 * sleep  = dtim_period, that meaons, we should 
 	 * awake before every dtim */
-	RT_TRACE(COMP_POWER, DBG_DMESG,
-		 ("dtim_counter:%x will sleep :%d beacon_intv\n",
+	RT_TRACE(COMP_POWER, DBG_DMESG, 
+		 ("dtim_counter:%x will sleep :%d beacon_intv\n", 
 		  rtlpriv->psc.dtim_counter, sleep_intv));
 
 	/* we tested that 40ms is enough for sw & hw sw delay */
@@ -698,7 +709,7 @@ void rtl_swlps_rf_sleep(struct ieee80211_hw *hw)
 
 void rtl_swlps_wq_callback(void *data)
 {
-	struct rtl_works *rtlworks =
+	struct rtl_works *rtlworks = 
 		container_of_dwork_rtl(data, struct rtl_works, ps_work);
 	struct ieee80211_hw *hw = rtlworks->hw;
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
@@ -711,7 +722,7 @@ void rtl_swlps_wq_callback(void *data)
 		rtl_swlps_rf_sleep(hw);
 
 		if (rtlpriv->psc.state && !ps) {
-			rtlpriv->psc.sleep_ms =
+			rtlpriv->psc.sleep_ms = 
 				jiffies_to_msecs(jiffies -
 						 rtlpriv->psc.last_action);
 		}
@@ -738,34 +749,34 @@ void rtl_p2p_noa_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 	pos = (u8 *)mgmt->u.beacon.variable;
 	end = data + len;
 	ie = NULL;
-
+		
 	while (pos + 1 < end) {
-
+		
 		if (pos + 2 + pos[1] > end)
-			return;
-
+			return;	
+		
 		if (pos[0] == 221 && pos[1] > 4) {
 			if (memcmp(&pos[2], p2p_oui_ie_type, 4) == 0) {
 				ie = pos + 2+4;
 				break;
 			}
-		}
-		pos += 2 + pos[1];
+		}		
+		pos += 2 + pos[1];		
 	}
 
 	if (ie == NULL)
 		return;
 	find_p2p_ie = true;
 	/*to find noa ie*/
-	while (ie + 1 < end) {
+	while (ie + 1 < end) {	
 		noa_len = READEF2BYTE(&ie[1]);
 		if (ie + 3 + ie[1] > end)
-			return;
-
+			return;	
+		
 		if (ie[0] == 12) {
 			find_p2p_ps_ie = true;
 			if ( (noa_len - 2) % 13 != 0){
-				RT_TRACE(COMP_INIT, DBG_LOUD,
+				RT_TRACE(COMP_INIT, DBG_LOUD, 
 					 ("P2P notice of absence: "
 					  "invalid length.%d\n",noa_len));
 				return;
@@ -775,7 +786,7 @@ void rtl_p2p_noa_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 			noa_index = ie[3];
 			if (rtlpriv->psc.p2p_ps_info.p2p_ps_mode == P2P_PS_NONE
 			    || noa_index != p2pinfo->noa_index) {
-				RT_TRACE(COMP_FW, DBG_LOUD,
+				RT_TRACE(COMP_FW, DBG_LOUD, 
 					 ("update NOA ie.\n"));
 				p2pinfo->noa_index = noa_index;
 				p2pinfo->opp_ps= (ie[4] >> 7);
@@ -783,26 +794,26 @@ void rtl_p2p_noa_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 				p2pinfo->noa_num = noa_num;
 				index = 5;
 				for (i = 0; i< noa_num; i++){
-					p2pinfo->noa_count_type[i] =
+					p2pinfo->noa_count_type[i] = 
 							READEF1BYTE(ie+index);
 					index += 1;
-					p2pinfo->noa_duration[i] =
+					p2pinfo->noa_duration[i] = 
 							READEF4BYTE(ie+index);
 					index += 4;
-					p2pinfo->noa_interval[i] =
+					p2pinfo->noa_interval[i] = 
 							READEF4BYTE(ie+index);
 					index += 4;
-					p2pinfo->noa_start_time[i] =
+					p2pinfo->noa_start_time[i] = 
 							READEF4BYTE(ie+index);
-					index += 4;
+					index += 4;				
 				}
 
 				if (p2pinfo->opp_ps == 1) {
 					p2pinfo->p2p_ps_mode = P2P_PS_CTWINDOW;
-					/* Driver should wait LPS
+					/* Driver should wait LPS 
 					 * entering CTWindow*/
 					if (rtlpriv->psc.b_fw_current_inpsmode){
-						rtl_p2p_ps_cmd(hw,
+						rtl_p2p_ps_cmd(hw, 
 							       P2P_PS_ENABLE);
 					}
 				} else if (p2pinfo->noa_num > 0) {
@@ -814,15 +825,15 @@ void rtl_p2p_noa_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 			}
 
 		break;
-		}
-		ie += 3 + noa_len;
+		} 
+		ie += 3 + noa_len;		
 	}
 
 	if (find_p2p_ie == true) {
-		if ((p2pinfo->p2p_ps_mode > P2P_PS_NONE) &&
+		if ((p2pinfo->p2p_ps_mode > P2P_PS_NONE) && 
 		    (find_p2p_ps_ie == false))
 			rtl_p2p_ps_cmd(hw, P2P_PS_DISABLE);
-	}
+	}	
 }
 
 void rtl_p2p_action_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
@@ -831,7 +842,7 @@ void rtl_p2p_action_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 	struct ieee80211_mgmt *mgmt = (void *)data;
 	struct rtl_p2p_ps_info *p2pinfo = &(rtlpriv->psc.p2p_ps_info);
 	bool find_p2p_ie = false , find_p2p_ps_ie = false;
-	u8 noa_num, index,i, noa_index = 0;
+	u8 noa_num, index,i, noa_index = 0;	
 	u8 *pos, *end, *ie;
 	u16 noa_len;
 	static u8 p2p_oui_ie_type[4] = {0x50, 0x6f, 0x9a, 0x09};
@@ -839,12 +850,12 @@ void rtl_p2p_action_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 	pos = (u8 *) &mgmt->u.action.category;
 	end = data + len;
 	ie = NULL;
-
+	
 	if (pos[0] == 0x7f ) {
 		if (memcmp(&pos[1], p2p_oui_ie_type, 4) == 0) {
-			ie = pos + 3+4;
+			ie = pos + 3+4;			
 		}
-	}
+	} 
 
 	if (ie == NULL)
 		return;
@@ -852,18 +863,18 @@ void rtl_p2p_action_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 
 	RT_TRACE(COMP_FW, DBG_LOUD, ("action frame find P2P IE.\n"));
 	/*to find noa ie*/
-	while (ie + 1 < end) {
+	while (ie + 1 < end) {	
 		noa_len = READEF2BYTE(&ie[1]);
 		if (ie + 3 + ie[1] > end)
-			return;
-
+			return;	
+		
 		if (ie[0] == 12) {
 			RT_TRACE(COMP_FW, DBG_LOUD, ("find NOA IE.\n"));
-			RT_PRINT_DATA(rtlpriv, COMP_FW, DBG_LOUD, ("noa ie "),
+			RT_PRINT_DATA(rtlpriv, COMP_FW, DBG_LOUD, ("noa ie "), 
 				      ie, noa_len);
 			find_p2p_ps_ie = true;
 			if ( (noa_len - 2) % 13 != 0){
-				RT_TRACE(COMP_FW, DBG_LOUD,
+				RT_TRACE(COMP_FW, DBG_LOUD, 
 					 ("P2P notice of absence: "
 					  "invalid length.%d\n",noa_len));
 				return;
@@ -879,26 +890,26 @@ void rtl_p2p_action_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 				p2pinfo->noa_num = noa_num;
 				index = 5;
 				for (i = 0; i< noa_num; i++){
-					p2pinfo->noa_count_type[i] =
+					p2pinfo->noa_count_type[i] = 
 							READEF1BYTE(ie+index);
 					index += 1;
-					p2pinfo->noa_duration[i] =
+					p2pinfo->noa_duration[i] = 
 							READEF4BYTE(ie+index);
 					index += 4;
-					p2pinfo->noa_interval[i] =
+					p2pinfo->noa_interval[i] = 
 							READEF4BYTE(ie+index);
 					index += 4;
-					p2pinfo->noa_start_time[i] =
+					p2pinfo->noa_start_time[i] = 
 							READEF4BYTE(ie+index);
-					index += 4;
+					index += 4;				
 				}
 
 				if (p2pinfo->opp_ps == 1) {
 					p2pinfo->p2p_ps_mode = P2P_PS_CTWINDOW;
-					/* Driver should wait LPS
+					/* Driver should wait LPS 
 					 * entering CTWindow */
 					if (rtlpriv->psc.b_fw_current_inpsmode){
-						rtl_p2p_ps_cmd(hw,
+						rtl_p2p_ps_cmd(hw, 
 							       P2P_PS_ENABLE);
 					}
 				} else if (p2pinfo->noa_num > 0) {
@@ -910,10 +921,10 @@ void rtl_p2p_action_ie(struct ieee80211_hw *hw, void *data, unsigned int len)
 			}
 
 		break;
-		}
-		ie += 3 + noa_len;
+		} 
+		ie += 3 + noa_len;		
 	}
-
+	
 
 }
 
@@ -922,13 +933,13 @@ void rtl_p2p_ps_cmd(struct ieee80211_hw *hw,u8 p2p_ps_state)
 {
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	struct rtl_ps_ctl *rtlps = rtl_psc(rtl_priv(hw));
-	struct rtl_p2p_ps_info  *p2pinfo = &(rtlpriv->psc.p2p_ps_info);
-
+	struct rtl_p2p_ps_info  *p2pinfo = &(rtlpriv->psc.p2p_ps_info); 
+	
 	RT_TRACE(COMP_FW, DBG_LOUD, (" p2p state %x\n",p2p_ps_state));
 	switch (p2p_ps_state) {
 		case P2P_PS_DISABLE:
 			p2pinfo->p2p_ps_state = p2p_ps_state;
-			rtlpriv->cfg->ops->set_hw_reg(hw,
+			rtlpriv->cfg->ops->set_hw_reg(hw, 
 						   HW_VAR_H2C_FW_P2P_PS_OFFLOAD,
 						   (u8 *)(&p2p_ps_state));
 
@@ -940,7 +951,7 @@ void rtl_p2p_ps_cmd(struct ieee80211_hw *hw,u8 p2p_ps_state)
 			if (rtlps->b_fw_current_inpsmode == true) {
 				if (rtlps->smart_ps == 0) {
 					rtlps->smart_ps = 2;
-					rtlpriv->cfg->ops->set_hw_reg(hw,
+					rtlpriv->cfg->ops->set_hw_reg(hw, 
 						    HW_VAR_H2C_FW_PWRMODE,
 						    (u8 *)(&rtlps->pwr_mode));
 				}
@@ -955,12 +966,12 @@ void rtl_p2p_ps_cmd(struct ieee80211_hw *hw,u8 p2p_ps_state)
 					if (rtlps->smart_ps != 0){
 						rtlps->smart_ps = 0;
 						rtlpriv->cfg->ops->set_hw_reg(
-						    hw, HW_VAR_H2C_FW_PWRMODE,
+						    hw, HW_VAR_H2C_FW_PWRMODE, 
 						    (u8 *)(&rtlps->pwr_mode));
 					}
 				}
-				rtlpriv->cfg->ops->set_hw_reg(hw,
-						HW_VAR_H2C_FW_P2P_PS_OFFLOAD,
+				rtlpriv->cfg->ops->set_hw_reg(hw, 
+						HW_VAR_H2C_FW_P2P_PS_OFFLOAD, 
 						(u8 *)(&p2p_ps_state));
 
 			}
@@ -970,8 +981,8 @@ void rtl_p2p_ps_cmd(struct ieee80211_hw *hw,u8 p2p_ps_state)
 		case P2P_PS_ALLSTASLEEP:
 			if (p2pinfo->p2p_ps_mode > P2P_PS_NONE) {
 				p2pinfo->p2p_ps_state = p2p_ps_state;
-				rtlpriv->cfg->ops->set_hw_reg(hw,
-						HW_VAR_H2C_FW_P2P_PS_OFFLOAD,
+				rtlpriv->cfg->ops->set_hw_reg(hw, 
+						HW_VAR_H2C_FW_P2P_PS_OFFLOAD, 
 						(u8 *)(&p2p_ps_state));
 			}
 			break;
@@ -979,8 +990,8 @@ void rtl_p2p_ps_cmd(struct ieee80211_hw *hw,u8 p2p_ps_state)
 			break;
 
 	}
-	RT_TRACE(COMP_FW, DBG_LOUD, (" ctwindow %x oppps %x \n",
-		 		     p2pinfo->ctwindow,p2pinfo->opp_ps));
+	RT_TRACE(COMP_FW, DBG_LOUD, (" ctwindow %x oppps %x \n", 
+		 		     p2pinfo->ctwindow,p2pinfo->opp_ps));	
 	RT_TRACE(COMP_FW, DBG_LOUD, ("count %x duration %x index %x interval %x"
 				     " start time %x noa num %x\n",
 				     p2pinfo->noa_count_type[0],
@@ -988,8 +999,8 @@ void rtl_p2p_ps_cmd(struct ieee80211_hw *hw,u8 p2p_ps_state)
 				     p2pinfo->noa_index,
 				     p2pinfo->noa_interval[0],
 				     p2pinfo->noa_start_time[0],
-				     p2pinfo->noa_num));
-	RT_TRACE(COMP_FW, DBG_LOUD, ("end\n"));
+				     p2pinfo->noa_num));	
+	RT_TRACE(COMP_FW, DBG_LOUD, ("end\n"));	
 }
 
 void rtl_p2p_info(struct ieee80211_hw *hw, void *data, unsigned int len)
@@ -1007,19 +1018,19 @@ void rtl_p2p_info(struct ieee80211_hw *hw, void *data, unsigned int len)
 		return;
 
 	/* and only beacons from the associated BSSID, please */
-	if (ether_addr_equal(hdr->addr3, rtlpriv->mac80211.bssid))
+	if (compare_ether_addr(hdr->addr3, rtlpriv->mac80211.bssid))
 		return;
-
+	
 	/* check if this really is a beacon */
-	if (!(ieee80211_is_beacon(hdr->frame_control) ||
+	if (!(ieee80211_is_beacon(hdr->frame_control) || 
 	      ieee80211_is_probe_resp(hdr->frame_control) ||
 	      ieee80211_is_action(hdr->frame_control)))
-		return;
+		return;	
 
 	if (ieee80211_is_action(hdr->frame_control)) {
 		rtl_p2p_action_ie(hw,data,len - FCS_LEN);
 	} else {
 		rtl_p2p_noa_ie(hw,data,len - FCS_LEN);
 	}
-
+	
 }

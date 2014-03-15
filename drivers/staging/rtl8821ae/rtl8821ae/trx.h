@@ -139,25 +139,25 @@
 #define SET_TX_DESC_USE_RATE(__pdesc, __val) 		\
 	SET_BITS_TO_LE_4BYTE(__pdesc+12, 8, 1, __val)
 #define SET_TX_DESC_DISABLE_RTS_FB(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 9, 1, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 9, 1, __val)	
 #define SET_TX_DESC_DISABLE_FB(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 10, 1, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 10, 1, __val)	
 #define SET_TX_DESC_CTS2SELF(__pdesc, __val) 		\
 	SET_BITS_TO_LE_4BYTE(__pdesc+12, 11, 1, __val)
 #define SET_TX_DESC_RTS_ENABLE(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 12, 1, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 12, 1, __val)	
 #define SET_TX_DESC_HW_RTS_ENABLE(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 13, 1, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 13, 1, __val)	
 #define SET_TX_DESC_NAV_USE_HDR(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 15, 1, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 15, 1, __val)	
 #define SET_TX_DESC_USE_MAX_LEN(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 16, 1, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 16, 1, __val)	
 #define SET_TX_DESC_MAX_AGG_NUM(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 17, 5, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 17, 5, __val)	
 #define SET_TX_DESC_NDPA(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 22, 2, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 22, 2, __val)	
 #define SET_TX_DESC_AMPDU_MAX_TIME(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+12, 24, 8, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+12, 24, 8, __val)	
 #define SET_TX_DESC_TX_ANT(__pdesc, __val) 		\
 	SET_BITS_TO_LE_4BYTE(__pdesc+20, 24, 4, __val)
 
@@ -166,7 +166,7 @@
 #define SET_TX_DESC_DATA_RATE_FB_LIMIT(__pdesc, __val) 		\
 	SET_BITS_TO_LE_4BYTE(__pdesc+16, 8, 5, __val)
 #define SET_TX_DESC_RTS_RATE_FB_LIMIT(__pdesc, __val) 		\
-	SET_BITS_TO_LE_4BYTE(__pdesc+16, 13, 4, __val)
+	SET_BITS_TO_LE_4BYTE(__pdesc+16, 13, 4, __val)	
 #define SET_TX_DESC_RETRY_LIMIT_ENABLE(__pdesc, __val) 			\
 	SET_BITS_TO_LE_4BYTE(__pdesc+16, 17, 1, __val)
 #define SET_TX_DESC_DATA_RETRY_LIMIT(__pdesc, __val) 		\
@@ -178,7 +178,7 @@
 #define SET_TX_DESC_TX_SUB_CARRIER(__pdesc, __val) 		\
 	SET_BITS_TO_LE_4BYTE(__pdesc+20, 0, 4, __val)
 #define SET_TX_DESC_DATA_SHORTGI(__pdesc, __val) 	\
-	SET_BITS_TO_LE_1BYTE(__pdesc+20, 6, 1, __val)
+	SET_BITS_TO_LE_1BYTE(__pdesc+20, 4, 1, __val)
 #define SET_TX_DESC_DATA_BW(__pdesc, __val) 		\
 	SET_BITS_TO_LE_4BYTE(__pdesc+20, 5, 2, __val)
 #define SET_TX_DESC_DATA_LDPC(__pdesc, __val) 	\
@@ -271,7 +271,7 @@
 #define GET_RX_STATUS_DESC_IS_TCPUDP(__pdesc) 				\
 	LE_BITS_TO_4BYTE(__pdesc+4, 22, 1)
 #define GET_RX_STATUS_DESC_CHK_VLD(__pdesc) 				\
-	LE_BITS_TO_4BYTE(__pdesc+4, 23, 1)
+	LE_BITS_TO_4BYTE(__pdesc+4, 23, 1)	
 #define GET_RX_DESC_PAM(__pdesc)				\
 	LE_BITS_TO_4BYTE(__pdesc+4, 24, 1)
 #define GET_RX_DESC_PWR(__pdesc) 				\
@@ -297,15 +297,11 @@
 #define GET_RX_STATUS_DESC_WLANHD_IV_LEN(__pdesc) 				\
 	LE_BITS_TO_4BYTE(__pdesc+8, 18, 6)
 #define GET_RX_STATUS_DESC_RPT_SEL(__pdesc) 				\
-	LE_BITS_TO_4BYTE(__pdesc+8, 28, 1)
+	LE_BITS_TO_4BYTE(__pdesc+8, 28, 1)	
 
 
 #define GET_RX_DESC_RXMCS(__pdesc) 				\
 	LE_BITS_TO_4BYTE(__pdesc+12, 0, 7)
-#define GET_RX_DESC_RXHT(__pdesc) 				\
-	LE_BITS_TO_4BYTE(__pdesc+12, 6, 1)
-#define GET_RX_STATUS_DESC_RX_GF(__pdesc) 				\
-	LE_BITS_TO_4BYTE(__pdesc+12, 7, 1)
 #define GET_RX_DESC_HTC(__pdesc) 				\
 	LE_BITS_TO_4BYTE(__pdesc+12, 10, 1)
 #define GET_RX_STATUS_DESC_EOSP(__pdesc)		\
@@ -323,12 +319,12 @@
 #define GET_RX_DESC_SPLCP(__pdesc) 				\
 	LE_BITS_TO_4BYTE(__pdesc+16, 0, 1)
 #define GET_RX_STATUS_DESC_LDPC(__pdesc) 				\
-	LE_BITS_TO_4BYTE(__pdesc+16, 1, 1)
+	LE_BITS_TO_4BYTE(__pdesc+16, 1, 1)	
 #define GET_RX_STATUS_DESC_STBC(__pdesc) 				\
-	LE_BITS_TO_4BYTE(__pdesc+16, 2, 1)
+	LE_BITS_TO_4BYTE(__pdesc+16, 2, 1)	
 #define GET_RX_DESC_BW(__pdesc) 				\
-	LE_BITS_TO_4BYTE(__pdesc+16, 4, 2)
-
+	LE_BITS_TO_4BYTE(__pdesc+16, 4, 2)	
+	
 #define GET_RX_DESC_TSFL(__pdesc) 				\
 	LE_BITS_TO_4BYTE(__pdesc+20, 0, 32)
 
@@ -632,7 +628,7 @@ bool rtl8821ae_rx_query_desc(struct ieee80211_hw *hw,
 			   u8 *pdesc, struct sk_buff *skb);
 void rtl8821ae_set_desc(struct ieee80211_hw * hw, u8 *pdesc, bool istx, u8 desc_name, u8 *val);
 u32 rtl8821ae_get_desc(u8 *pdesc, bool istx, u8 desc_name);
-bool rtl8821ae_is_tx_desc_closed(struct ieee80211_hw *hw,
+bool rtl8821ae_is_tx_desc_closed(struct ieee80211_hw *hw, 
 				 u8 hw_queue, u16 index);
 void rtl8821ae_tx_polling(struct ieee80211_hw *hw, u8 hw_queue);
 void rtl8821ae_tx_fill_cmddesc(struct ieee80211_hw *hw, u8 *pdesc,

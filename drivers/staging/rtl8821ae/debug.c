@@ -42,7 +42,7 @@ void rtl_dbgp_flag_init(struct ieee80211_hw *hw)
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	u8 i;
 
-	rtlpriv->dbg.global_debuglevel = DBG_DMESG;
+	rtlpriv->dbg.global_debuglevel = DBG_EMERG;
 
 	rtlpriv->dbg.global_debugcomponents =
 		COMP_ERR |
@@ -69,10 +69,10 @@ void rtl_dbgp_flag_init(struct ieee80211_hw *hw)
 	  	COMP_RATR |
 	  	COMP_CMD |
 	  	COMP_EASY_CONCURRENT |
-	  	COMP_EFUSE |
+	  	COMP_EFUSE | 
 	  	COMP_QOS | COMP_MAC80211 | COMP_REGD |
 		COMP_CHAN |
-		COMP_BT_COEXIST |
+		COMP_BT_COEXIST | 
 		COMP_IQK |
 		0;
 
@@ -94,7 +94,7 @@ static int rtl_proc_get_mac_0(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -104,12 +104,12 @@ static int rtl_proc_get_mac_0(struct seq_file *m, void *v)
 static int dl_proc_open_mac_0(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_0, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_0 = {
 	.open = dl_proc_open_mac_0,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -124,7 +124,7 @@ static int rtl_proc_get_mac_1(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -134,12 +134,12 @@ static int rtl_proc_get_mac_1(struct seq_file *m, void *v)
 static int dl_proc_open_mac_1(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_1, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_1 = {
 	.open = dl_proc_open_mac_1,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -154,7 +154,7 @@ static int rtl_proc_get_mac_2(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -164,12 +164,12 @@ static int rtl_proc_get_mac_2(struct seq_file *m, void *v)
 static int dl_proc_open_mac_2(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_2, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_2 = {
 	.open = dl_proc_open_mac_2,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -184,7 +184,7 @@ static int rtl_proc_get_mac_3(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -194,12 +194,12 @@ static int rtl_proc_get_mac_3(struct seq_file *m, void *v)
 static int dl_proc_open_mac_3(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_3, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_3 = {
 	.open = dl_proc_open_mac_3,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -214,7 +214,7 @@ static int rtl_proc_get_mac_4(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -224,12 +224,12 @@ static int rtl_proc_get_mac_4(struct seq_file *m, void *v)
 static int dl_proc_open_mac_4(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_4, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_4 = {
 	.open = dl_proc_open_mac_4,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -244,7 +244,7 @@ static int rtl_proc_get_mac_5(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -254,12 +254,12 @@ static int rtl_proc_get_mac_5(struct seq_file *m, void *v)
 static int dl_proc_open_mac_5(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_5, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_5 = {
 	.open = dl_proc_open_mac_5,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -274,7 +274,7 @@ static int rtl_proc_get_mac_6(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -284,12 +284,12 @@ static int rtl_proc_get_mac_6(struct seq_file *m, void *v)
 static int dl_proc_open_mac_6(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_6, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_6 = {
 	.open = dl_proc_open_mac_6,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -304,7 +304,7 @@ static int rtl_proc_get_mac_7(struct seq_file *m, void *v)
 	for (n = 0; n <= max; ) {
 		seq_printf(m, "\n%8.8x  ", n + page);
 		for (i = 0; i < 4 && n <= max; i++, n += 4)
-			seq_printf(m, "%8.8x    ",
+			seq_printf(m, "%8.8x    ", 
 				   rtl_read_dword(rtlpriv, (page | n)));
 	}
 	seq_puts(m, "\n");
@@ -314,12 +314,12 @@ static int rtl_proc_get_mac_7(struct seq_file *m, void *v)
 static int dl_proc_open_mac_7(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_mac_7, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_mac_7 = {
 	.open = dl_proc_open_mac_7,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -343,12 +343,12 @@ static int rtl_proc_get_bb_8(struct seq_file *m, void *v)
 static int dl_proc_open_bb_8(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_8, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_8 = {
 	.open = dl_proc_open_bb_8,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -372,12 +372,12 @@ static int rtl_proc_get_bb_9(struct seq_file *m, void *v)
 static int dl_proc_open_bb_9(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_9, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_9 = {
 	.open = dl_proc_open_bb_9,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -401,12 +401,12 @@ static int rtl_proc_get_bb_a(struct seq_file *m, void *v)
 static int dl_proc_open_bb_a(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_a, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_a = {
 	.open = dl_proc_open_bb_a,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -430,12 +430,12 @@ static int rtl_proc_get_bb_b(struct seq_file *m, void *v)
 static int dl_proc_open_bb_b(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_b, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_b = {
 	.open = dl_proc_open_bb_b,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -459,12 +459,12 @@ static int rtl_proc_get_bb_c(struct seq_file *m, void *v)
 static int dl_proc_open_bb_c(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_c, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_c = {
 	.open = dl_proc_open_bb_c,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -488,12 +488,12 @@ static int rtl_proc_get_bb_d(struct seq_file *m, void *v)
 static int dl_proc_open_bb_d(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_d, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_d = {
 	.open = dl_proc_open_bb_d,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -517,12 +517,12 @@ static int rtl_proc_get_bb_e(struct seq_file *m, void *v)
 static int dl_proc_open_bb_e(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_e, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_e = {
 	.open = dl_proc_open_bb_e,
-	.read = seq_read,
-	.llseek = seq_lseek,
+	.read = seq_read,      
+	.llseek = seq_lseek,      
 	.release = seq_release,
 };
 
@@ -546,7 +546,7 @@ static int rtl_proc_get_bb_f(struct seq_file *m, void *v)
 static int dl_proc_open_bb_f(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_bb_f, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_bb_f = {
 	.open = dl_proc_open_bb_f,
@@ -574,7 +574,7 @@ static int rtl_proc_get_reg_rf_a(struct seq_file *m, void *v)
 static int dl_proc_open_rf_a(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_reg_rf_a, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_rf_a = {
 	.open = dl_proc_open_rf_a,
@@ -593,7 +593,7 @@ static int rtl_proc_get_reg_rf_b(struct seq_file *m, void *v)
 		seq_printf(m, "\n%8.8x  ", n);
 		for (i = 0; i < 4 && n <= max; n += 1, i++)
 			seq_printf(m, "%8.8x    ",
-				   rtl_get_rfreg(hw, RF90_PATH_B, n,
+				   rtl_get_rfreg(hw, RF90_PATH_B, n, 
 				   		 0xffffffff));
 	}
 	seq_puts(m, "\n");
@@ -603,7 +603,7 @@ static int rtl_proc_get_reg_rf_b(struct seq_file *m, void *v)
 static int dl_proc_open_rf_b(struct inode *inode, struct file *file)
 {
 	return single_open(file, rtl_proc_get_reg_rf_b, GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_rf_b = {
 	.open = dl_proc_open_rf_b,
@@ -635,7 +635,7 @@ static int rtl_proc_get_cam_register_1(struct seq_file *m, void *v)
 
 			/* Check polling bit is clear */
 			while ((i--) >= 0) {
-				ulstatus = rtl_read_dword(rtlpriv,
+				ulstatus = rtl_read_dword(rtlpriv, 
 						rtlpriv->cfg->maps[RWCAM]);
 				if (ulstatus & BIT(31)) {
 					continue;
@@ -644,9 +644,9 @@ static int rtl_proc_get_cam_register_1(struct seq_file *m, void *v)
 				}
 			}
 
-	  		rtl_write_dword(rtlpriv, rtlpriv->cfg->maps[RWCAM],
+	  		rtl_write_dword(rtlpriv, rtlpriv->cfg->maps[RWCAM], 
 					target_cmd);
-	  	 	target_val = rtl_read_dword(rtlpriv,
+	  	 	target_val = rtl_read_dword(rtlpriv, 
 						    rtlpriv->cfg->maps[RCAMO]);
 			seq_printf(m, "%8.8x ", target_val);
 	 	}
@@ -657,9 +657,9 @@ static int rtl_proc_get_cam_register_1(struct seq_file *m, void *v)
 
 static int dl_proc_open_cam_1(struct inode *inode, struct file *file)
 {
-	return single_open(file, rtl_proc_get_cam_register_1,
+	return single_open(file, rtl_proc_get_cam_register_1, 
 			   GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_cam_1 = {
 	.open = dl_proc_open_cam_1,
@@ -689,7 +689,7 @@ static int rtl_proc_get_cam_register_2(struct seq_file *m, void *v)
 			target_cmd = target_cmd | BIT(31);
 
 			while ((i--) >= 0) {
-				ulstatus = rtl_read_dword(rtlpriv,
+				ulstatus = rtl_read_dword(rtlpriv, 
 						rtlpriv->cfg->maps[RWCAM]);
 				if (ulstatus & BIT(31)) {
 					continue;
@@ -698,9 +698,9 @@ static int rtl_proc_get_cam_register_2(struct seq_file *m, void *v)
 				}
 			}
 
-	  		rtl_write_dword(rtlpriv, rtlpriv->cfg->maps[RWCAM],
+	  		rtl_write_dword(rtlpriv, rtlpriv->cfg->maps[RWCAM], 
 					target_cmd);
-	  	 	target_val = rtl_read_dword(rtlpriv,
+	  	 	target_val = rtl_read_dword(rtlpriv, 
 						    rtlpriv->cfg->maps[RCAMO]);
 			seq_printf(m, "%8.8x ", target_val);
 	 	}
@@ -711,9 +711,9 @@ static int rtl_proc_get_cam_register_2(struct seq_file *m, void *v)
 
 static int dl_proc_open_cam_2(struct inode *inode, struct file *file)
 {
-	return single_open(file, rtl_proc_get_cam_register_2,
+	return single_open(file, rtl_proc_get_cam_register_2, 
 			   GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_cam_2 = {
 	.open = dl_proc_open_cam_2,
@@ -743,7 +743,7 @@ static int rtl_proc_get_cam_register_3(struct seq_file *m, void *v)
 			target_cmd = target_cmd | BIT(31);
 
 			while ((i--) >= 0) {
-				ulstatus = rtl_read_dword(rtlpriv,
+				ulstatus = rtl_read_dword(rtlpriv, 
 						rtlpriv->cfg->maps[RWCAM]);
 				if (ulstatus & BIT(31)) {
 					continue;
@@ -752,9 +752,9 @@ static int rtl_proc_get_cam_register_3(struct seq_file *m, void *v)
 				}
 			}
 
-	  		rtl_write_dword(rtlpriv, rtlpriv->cfg->maps[RWCAM],
+	  		rtl_write_dword(rtlpriv, rtlpriv->cfg->maps[RWCAM], 
 					target_cmd);
-	  	 	target_val = rtl_read_dword(rtlpriv,
+	  	 	target_val = rtl_read_dword(rtlpriv, 
 						    rtlpriv->cfg->maps[RCAMO]);
 			seq_printf(m, "%8.8x ", target_val);
 	 	}
@@ -765,9 +765,9 @@ static int rtl_proc_get_cam_register_3(struct seq_file *m, void *v)
 
 static int dl_proc_open_cam_3(struct inode *inode, struct file *file)
 {
-	return single_open(file, rtl_proc_get_cam_register_3,
+	return single_open(file, rtl_proc_get_cam_register_3, 
 			   GET_INODE_DATA(inode));
-}
+} 
 
 static const struct file_operations file_ops_cam_3 = {
 	.open = dl_proc_open_cam_3,
@@ -798,147 +798,147 @@ void rtl_proc_add_one(struct ieee80211_hw *hw)
 	entry = proc_create_data("mac-0", S_IFREG | S_IRUGO,
 				  rtlpriv->dbg.proc_dir, &file_ops_mac_0, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, DBG_EMERG,
+		RT_TRACE(COMP_INIT, DBG_EMERG, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-0\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("mac-1", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_mac_1, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-1\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("mac-2", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_mac_2, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-2\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("mac-3", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_mac_3, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-3\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("mac-4", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_mac_4, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-4\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("mac-5", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_mac_5, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-5\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("mac-6", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_mac_6, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-6\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("mac-7", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_mac_7, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/mac-7\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-8", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_8, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-8\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-9", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_9, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-9\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-a", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_a, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-a\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-b", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_b, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-b\n",
 		      rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-c", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_c, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-c\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-d", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_d, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-d\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-e", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_e, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-e\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("bb-f", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_bb_f, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/bb-f\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("rf-a", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_rf_a, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/rf-a\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("rf-b", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_rf_b, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/rf-b\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("cam-1", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_cam_1, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/cam-1\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("cam-2", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_cam_2, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/cam-2\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 
 	entry = proc_create_data("cam-3", S_IFREG | S_IRUGO,
 				 rtlpriv->dbg.proc_dir, &file_ops_cam_3, hw);
 	if (!entry)
-		RT_TRACE(COMP_INIT, COMP_ERR,
+		RT_TRACE(COMP_INIT, COMP_ERR, 
 			 ("Unable to initialize /proc/net/%s/%s/cam-3\n",
 			  rtlpriv->cfg->name, rtlpriv->dbg.proc_name));
 }

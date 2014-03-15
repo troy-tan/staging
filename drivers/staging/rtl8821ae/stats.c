@@ -41,7 +41,7 @@ u8 rtl_query_rxpwrpercentage(char antpower)
 	else
 		return (100 + antpower);
 }
-//EXPORT_SYMBOL(rtl_query_rxpwrpercentage);
+EXPORT_SYMBOL(rtl_query_rxpwrpercentage);
 
 u8 rtl_evm_db_to_percentage(char value)
 {
@@ -59,7 +59,7 @@ u8 rtl_evm_db_to_percentage(char value)
 
 	return ret_val;
 }
-//EXPORT_SYMBOL(rtl_evm_db_to_percentage);
+EXPORT_SYMBOL(rtl_evm_db_to_percentage);
 
 long rtl_translate_todbm(struct ieee80211_hw *hw,
 			 u8 signal_strength_index)
@@ -98,7 +98,7 @@ long rtl_signal_scale_mapping(struct ieee80211_hw *hw, long currsig)
 
 	return retsig;
 }
-//EXPORT_SYMBOL(rtl_signal_scale_mapping);
+EXPORT_SYMBOL(rtl_signal_scale_mapping);
 
 void rtl_process_ui_rssi(struct ieee80211_hw *hw, struct rtl_stats *pstatus)
 {
@@ -106,7 +106,7 @@ void rtl_process_ui_rssi(struct ieee80211_hw *hw, struct rtl_stats *pstatus)
 	struct rtl_phy *rtlphy = &(rtlpriv->phy);
 	u8 rfpath;
 	u32 last_rssi, tmpval;
-
+	
 	if (!pstatus->b_packet_toself && !pstatus->b_packet_beacon)
 		return;
 
@@ -157,9 +157,9 @@ void rtl_process_ui_rssi(struct ieee80211_hw *hw, struct rtl_stats *pstatus)
 			    (RX_SMOOTH_FACTOR);
 		}
 		rtlpriv->stats.rx_snr_db[rfpath] = pstatus->rx_snr[rfpath];
-		rtlpriv->stats.rx_evm_dbm[rfpath] =
+		rtlpriv->stats.rx_evm_dbm[rfpath] = 
 					pstatus->rx_mimo_evm_dbm[rfpath];
-		rtlpriv->stats.rx_cfo_short[rfpath] =
+		rtlpriv->stats.rx_cfo_short[rfpath] = 
 					pstatus->cfo_short[rfpath];
 		rtlpriv->stats.rx_cfo_tail[rfpath] = pstatus->cfo_tail[rfpath];
 	}
@@ -191,7 +191,7 @@ static void rtl_process_pwdb(struct ieee80211_hw *hw, struct rtl_stats *pstatus)
 	rcu_read_lock();
 	if (rtlpriv->mac80211.opmode != NL80211_IFTYPE_STATION)
 		sta = rtl_find_sta(hw, pstatus->psaddr);
-
+	
 	/* adhoc or ap mode */
 	if (sta) {
 		drv_priv = (struct rtl_sta_info *) sta->drv_priv;
@@ -222,7 +222,7 @@ static void rtl_process_pwdb(struct ieee80211_hw *hw, struct rtl_stats *pstatus)
 		rtlpriv->dm.undecorated_smoothed_pwdb = undecorated_smoothed_pwdb;
 	}
 	rcu_read_unlock();
-
+	
 	rtl_update_rxsignalstatistics(hw, pstatus);
 }
 
@@ -234,7 +234,7 @@ static void rtl_process_ui_link_quality(struct ieee80211_hw *hw,
 
 	if (pstatus->signalquality == 0)
 		return;
-
+	
 	if (rtlpriv->stats.ui_link_quality.total_num++ >=
 	    PHY_LINKQUALITY_SLID_WIN_MAX) {
 		rtlpriv->stats.ui_link_quality.total_num =
@@ -245,7 +245,7 @@ static void rtl_process_ui_link_quality(struct ieee80211_hw *hw,
 	}
 	rtlpriv->stats.ui_link_quality.total_val += pstatus->signalquality;
 	rtlpriv->stats.ui_link_quality.elements[
-		rtlpriv->stats.ui_link_quality.index++] =
+		rtlpriv->stats.ui_link_quality.index++] = 
 							pstatus->signalquality;
 	if (rtlpriv->stats.ui_link_quality.index >=
 	    PHY_LINKQUALITY_SLID_WIN_MAX)
@@ -280,4 +280,4 @@ void rtl_process_phyinfo(struct ieee80211_hw *hw, u8 *buffer,
 	rtl_process_pwdb(hw, pstatus);
 	rtl_process_ui_link_quality(hw, pstatus);
 }
-//EXPORT_SYMBOL(rtl_process_phyinfo);
+EXPORT_SYMBOL(rtl_process_phyinfo);

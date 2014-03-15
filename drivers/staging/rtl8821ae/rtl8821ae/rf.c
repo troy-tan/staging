@@ -39,7 +39,7 @@ static bool _rtl8821ae_phy_rf6052_config_parafile(struct ieee80211_hw *hw);
 void rtl8821ae_phy_rf6052_set_bandwidth(struct ieee80211_hw *hw, u8 bandwidth)
 {
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
-
+	
 	switch (bandwidth) {
 	case HT_CHANNEL_WIDTH_20:
 		rtl_set_rfreg(hw, RF90_PATH_A, RF_CHNLBW, BIT(11)|BIT(10), 3);
@@ -426,7 +426,7 @@ static bool _rtl8821ae_phy_rf6052_config_parafile(struct ieee80211_hw *hw)
 	for (rfpath = 0; rfpath < rtlphy->num_total_rfpath; rfpath++) {
 		switch (rfpath) {
 		case RF90_PATH_A: {
-			if (rtlhal->hw_type == HARDWARE_TYPE_RTL8812AE)
+			if (rtlhal->hw_type == HARDWARE_TYPE_RTL8812AE) 
 				rtstatus = rtl8812ae_phy_config_rf_with_headerfile(hw,
 									(enum radio_path)rfpath);
 			else
@@ -435,7 +435,7 @@ static bool _rtl8821ae_phy_rf6052_config_parafile(struct ieee80211_hw *hw)
 			break;
 			}
 		case RF90_PATH_B: {
-			if (rtlhal->hw_type == HARDWARE_TYPE_RTL8812AE)
+			if (rtlhal->hw_type == HARDWARE_TYPE_RTL8812AE) 
 				rtstatus = rtl8812ae_phy_config_rf_with_headerfile(hw,
 									(enum radio_path)rfpath);
 			else
@@ -448,7 +448,7 @@ static bool _rtl8821ae_phy_rf6052_config_parafile(struct ieee80211_hw *hw)
 		case RF90_PATH_D:
 			break;
 		}
-
+		
 		if (rtstatus != true) {
 			RT_TRACE(COMP_INIT, DBG_TRACE,
 				 ("Radio[%d] Fail!!", rfpath));

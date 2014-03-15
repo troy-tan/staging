@@ -115,7 +115,7 @@ struct coex_dm_8192e_2ant{
 	u8 cur_ampdutime_type;
 };
 
-struct coex_sta_8192e_2ant{
+struct coex_sta_8192e_2ant{	
 	bool bt_link_exist;
 	bool sco_exist;
 	bool a2dp_exist;
@@ -150,7 +150,7 @@ void ex_halbtc8192e2ant_scan_notify(struct btc_coexist *btcoexist, u8 type);
 void ex_halbtc8192e2ant_connect_notify(struct btc_coexist *btcoexist, u8 type);
 void ex_halbtc8192e2ant_media_status_notify(struct btc_coexist *btcoexist,
 					    u8 type);
-void ex_halbtc8192e2ant_special_packet_notify(struct btc_coexist *btcoexist,
+void ex_halbtc8192e2ant_special_packet_notify(struct btc_coexist *btcoexist, 
 					      u8 type);
 void ex_halbtc8192e2ant_bt_info_notify(struct btc_coexist *btcoexist,
 				       u8 *tmpBuf,u8 length);
